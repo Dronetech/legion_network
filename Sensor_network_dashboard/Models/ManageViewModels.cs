@@ -12,6 +12,8 @@ namespace Sensor_network_dashboard.Models
         public string PhoneNumber { get; set; }
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
+        //new prop
+        public string external_key { get; set; }
     }
 
     public class ManageLoginsViewModel

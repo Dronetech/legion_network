@@ -49,13 +49,17 @@ namespace Sensor_network_dashboard.Controllers
                 : "";
 
             var model = new IndexViewModel
-            {
+            {                
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(User.Identity.GetUserId()),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(User.Identity.GetUserId()),
                 Logins = await UserManager.GetLoginsAsync(User.Identity.GetUserId()),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(User.Identity.GetUserId())
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(User.Identity.GetUserId()),
+                external_key = UserManager.FindById(User.Identity.GetUserId()).external_api_key
+
             };
+                        
+
             return View(model);
         }
 
@@ -90,6 +94,19 @@ namespace Sensor_network_dashboard.Controllers
                 message = ManageMessageId.Error;
             }
             return RedirectToAction("ManageLogins", new { Message = message });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> SetNewKey()
+        {
+            if(ModelState.IsValid)
+            {
+                ApplicationUser u = UserManager.FindById(User.Identity.GetUserId());
+                u.external_api_key = Guid.NewGuid().ToString();
+                await UserManager.UpdateAsync(u);
+            }
+
+            return RedirectToAction("Index", "Manage");
         }
 
         //
@@ -165,7 +182,7 @@ namespace Sensor_network_dashboard.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
-        {
+        {            
             if (!ModelState.IsValid)
             {
                 return View(model);

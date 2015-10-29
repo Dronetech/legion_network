@@ -1,0 +1,161 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+<div class="jumbotron">
+    <h1>Sensor NetWork</h1>
+    <p class="lead">Sensor monitor test Page</p>
+   </div>
+
+<div class="row" id="sensorRow" >
+       
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <canvas id="sensores" height="150" width="300"></canvas>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <canvas id="bateria" height="150" width="300"></canvas>
+        </div>
+        </div>
+    <div class="row">
+        <div class="col-md-12">
+            <canvas id="humidity" height="150" width="300"></canvas>
+
+        </div>
+    </div>
+<div class="row">
+   
+</div>   
+
+@*http://data.legion-uvs.com/api/sensor_data*@
+
+@section Scripts{
+<script>
+  //  var domain = "http://localhost:56724";
+    var domain = "http://data.legion-uvs.com";
+    $(function () {
+        $.getJSON(domain + "/api/sensor_data/SensorNameArray", function (result) {
+           
+            for (var item in result) {
+                
+                $.getJSON(domain + "/api/lastsensordata/" + result[item], function (result) {
+                        var html = "";
+                        //alert(result.sensor_name.toString());
+                        html += "<div class='col-md-3'><div class='panel panel-default'><div class='panel-heading'>Name</div><div class='panel-body'>" +result.sensor_name.toString() + "</div></div></div>"
+                        html += "<div class='col-md-3'><div class='panel panel-default'><div class='panel-heading'>Temperature</div><div class='panel-body'>" + result.temperature.toString() + " celsius</div></div></div>"
+                        html += "<div class='col-md-3'><div class='panel panel-default'><div class='panel-heading'>Humidity</div><div class='panel-body'>" + result.humidity.toString() + "%</div></div></div>"
+                        html += "<div class='col-md-3'><div class='panel panel-default'><div class='panel-heading'>Voltage</div><div class='panel-body'>" + result.voltage.toString() + "v</div></div></div>"
+
+   
+                        $("#sensorRow").append(html);
+                });
+               
+            }
+
+           
+        });
+
+        $.getJSON(domain +"/api/sensor_data", function (result) {
+            var labels = [], data = [], data2 = [], data3 = [];
+          
+            for (var item in result) {
+                labels.push(result[item].timestamp.toString());
+                data.push(result[item].humidity);
+                data2.push(result[item].temperature);
+                data3.push(result[item].voltage);
+            }
+
+            var tempData = {
+                labels: labels,
+                datasets: [
+       
+       {
+           label: "Temperature",
+           fill: true,
+           backgroundColor: "rgba(220,220,220,0.2)",
+           borderColor: "rgba(220,220,220,1)",
+           pointBorderColor: "rgba(220,220,220,1)",
+           pointBackgroundColor: "#fff",
+           pointBorderWidth: 1,
+           pointHoverRadius: 2,
+           pointHoverBackgroundColor: "rgba(220,220,220,1)",
+           pointHoverBorderColor: "rgba(220,220,220,1)",
+           pointHoverBorderWidth: 2,
+           data: data2
+       }
+                ]
+            };
+
+
+            var tempData2 = {
+                labels: labels,
+                datasets: [
+       {
+           label: "Battery",
+           fill: true,
+           backgroundColor: "rgba(220,220,220,0.2)",
+           borderColor: "rgba(220,220,220,1)",
+           pointBorderColor: "rgba(220,220,220,1)",
+           pointBackgroundColor: "#fff",
+           pointBorderWidth: 1,
+           pointHoverRadius: 2,
+           pointHoverBackgroundColor: "rgba(220,220,220,1)",
+           pointHoverBorderColor: "rgba(220,220,220,1)",
+           pointHoverBorderWidth: 2,
+           data: data3
+       }  ]
+            };
+
+            var tempData3 = {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Humidity",
+                        fill: true,
+                        backgroundColor: "rgba(220,220,220,0.2)",
+                        borderColor: "rgba(220,220,220,1)",
+                        pointBorderColor: "rgba(220,220,220,1)",
+                        pointBackgroundColor: "#fff",
+                        pointBorderWidth: 1,
+                        pointHoverRadius: 2,
+                        pointHoverBackgroundColor: "rgba(220,220,220,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHoverBorderWidth: 2,
+                        data: data
+                    }
+                ]
+            }
+         
+
+            var temp = document.getElementById('sensores').getContext('2d');
+            var temp2 = document.getElementById('bateria').getContext('2d');
+            var temp3 = document.getElementById('humidity').getContext('2d');
+            //var lineChart = new Chart(temp).Line(tempData, {
+            //    responsive: true
+            //});
+
+            Chart.defaults.global.responsive = true;
+
+            var lineChart = new Chart(temp, {
+                type: 'line', data: tempData, options: {}});
+            var lineChart2 = new Chart(temp2, { type: 'line', data: tempData2, options: {} });
+            var lineChart3 = new Chart(temp3, { type: 'line', data: tempData3, options: {} });
+
+            //var lineChart2 = new Chart(temp2).Line(tempData2, {
+            //    responsive: true
+            //                });
+            //var lineChart3 = new Chart(temp3).Line(tempData3, { responsive: true });
+           // var lineChart2 = new Chart(temp).Line(tempData2);
+
+        });
+    })
+
+</script>
+
+
+}

@@ -12,12 +12,17 @@ namespace legion_service.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class LastSensorDataController : ApiController
     {
-        private legion_serviceContext db = new legion_serviceContext();
+        private ISensorRepository db;
+        
+        public LastSensorDataController(ISensorRepository repository)
+        {           
+            this.db = repository;
+        }
 
-       [Route("api/LastSensorData/{sensor_name}")]
-       public sensor_data GetLastSensorData(string sensor_name)
+       [Route("api/LastSensorData/{userid}/{sensor_name}")]
+       public sensor_data GetLastSensorData(string userid, string sensor_name)
         {
-            return db.sensor_data.Where(x => x.sensor_name == sensor_name).OrderByDescending(x => x.Id).FirstOrDefault();
+            return db.GetLastSensorData(userid, sensor_name);
         }
 
     }

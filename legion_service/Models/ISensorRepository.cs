@@ -22,6 +22,7 @@ namespace legion_service.Models
         List<sensor_data> getLastSensorData(string userID, int top);
         List<string> getSensorNames(string userID);
         Task<int> AddSensorData(sensor_data sensor_data);
+        sensor_data GetLastSensorData(string userid, string sensor_name);
         void Dispose();
 
     }

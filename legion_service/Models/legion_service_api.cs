@@ -24,6 +24,7 @@ namespace legion_service.Models
             return db.sensor_data.Where(u => u.userGuid == userID).OrderByDescending(x => x.Id).Take(top).ToList();
         }
 
+
         public List<sensor_data> getAllSensorData(string userID)
         {
            return db.sensor_data.Where(x => x.userGuid == userID).ToList();
@@ -51,6 +52,12 @@ namespace legion_service.Models
                            where c.userGuid == userID
                            select c.sensor_name).Distinct();
             return sensors.ToList();
+        }
+
+
+        public sensor_data GetLastSensorData(string userid, string sensor_name)
+        {
+            return db.sensor_data.Where(x => x.sensor_name == sensor_name && x.userGuid == userid).OrderByDescending(x => x.Id).FirstOrDefault();
         }
     }
 }

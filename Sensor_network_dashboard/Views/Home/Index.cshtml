@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Home Page";
+   
 }
 
 
@@ -39,11 +40,10 @@
   //  var domain = "http://localhost:56724";
     var domain = "http://data.legion-uvs.com";
     $(function () {
-        $.getJSON(domain + "/api/sensor_data/SensorNameArray", function (result) {
+        $.getJSON(domain + "/api/sensor_data/SensorNameArray" + @Model.external_key, function (result) {
            
-            for (var item in result) {
-                
-                $.getJSON(domain + "/api/lastsensordata/" + result[item], function (result) {
+            for (var item in result) {                
+                $.getJSON(domain + "/api/lastsensordata/"+ @Model.external_key + result[item], function (result) {
                         var html = "";
                         //alert(result.sensor_name.toString());
                         html += "<div class='col-md-3'><div class='panel panel-default'><div class='panel-heading'>Name</div><div class='panel-body'>" +result.sensor_name.toString() + "</div></div></div>"
@@ -60,7 +60,7 @@
            
         });
 
-        $.getJSON(domain +"/api/sensor_data", function (result) {
+        $.getJSON(domain +"/api/sensor_data/"+@Model.external_key, function (result) {
             var labels = [], data = [], data2 = [], data3 = [];
           
             for (var item in result) {

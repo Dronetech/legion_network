@@ -11,6 +11,13 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using legion_service.Models;
 using System.Web.Http.Cors;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Security.Claims;
+
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
+
 
 namespace legion_service.Controllers
 {
@@ -18,48 +25,66 @@ namespace legion_service.Controllers
     public class sensor_dataController : ApiController
     {      
         private ISensorRepository db;
+        private ApplicationUserManager _userManager;
+        private ApplicationUser _ctx;
 
         public sensor_dataController(ISensorRepository repository)
         {           
-            this.db = repository;
+            this.db = repository;            
+           
         }
 
-        [Route("api/sensor_data/lastData/{userID}")]
-        public sensor_data GetLastSensorData(string userID)
+        public ApplicationUserManager UserManager
         {
-          
-            return db.getLastSensorData(userID);
+            get
+            {
+                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
         }
 
-        [Route("api/sensor_data/SensorNameArray/{userID}")]
-        public List<string> GetSensors(string userID)
+        [Route("api/sensor_data/lastData/")]
+        [Authorize]
+        public sensor_data GetLastSensorData()
         {
-            return db.getSensorNames("");
+            
+          return db.getLastSensorData(GetUserIDFromRequest());
+        }
+
+        private string GetUserIDFromRequest()
+        {
+            var user = UserManager.FindByName(User.Identity.Name);
+            string userID = "";
+            if (user != null)
+            {
+                userID = user.external_api_key;
+            }
+            return userID;
+        }
+
+        [Route("api/sensor_data/SensorNameArray/")]
+        [Authorize]
+        public List<string> GetSensors()
+        {
+            return db.getSensorNames(GetUserIDFromRequest());
         }
           
         //GET: api/sensor_data
-        public List<sensor_data> Getsensor_data(string userID)        
+        [Authorize]
+        public List<sensor_data> Getsensor_data()        
         {
+           
             //IQueryable<sensor_data> l = db.sensor_data.OrderByDescending(x => x.Id).Take(200);
-            return db.getAllSensorData("");
+            return db.getAllSensorData(GetUserIDFromRequest());
         }
 
-        //// GET: api/sensor_data/5
-        //[ResponseType(typeof(sensor_data))]
-        //public async Task<IHttpActionResult> Getsensor_data(int id)
-        //{
-        //    sensor_data sensor_data = await db.sensor_data.FindAsync(id);
-        //    if (sensor_data == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(sensor_data);
-        //}
-
-
+     
         // POST: api/sensor_data
         [ResponseType(typeof(sensor_data))]
+        [Authorize]
         public async Task<IHttpActionResult> Postsensor_data(sensor_data sensor_data)
         {
             if (!ModelState.IsValid)

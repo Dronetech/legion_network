@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sensor_network_dashboard", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceTest", "ServiceTest\ServiceTest.csproj", "{36B44025-1376-404A-A382-AF82A7E23607}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularDashboard", "AngularDashboard\AngularDashboard.csproj", "{2993F389-39B1-45B1-9FA5-07DC6EC60D18}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{36B44025-1376-404A-A382-AF82A7E23607}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36B44025-1376-404A-A382-AF82A7E23607}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36B44025-1376-404A-A382-AF82A7E23607}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2993F389-39B1-45B1-9FA5-07DC6EC60D18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2993F389-39B1-45B1-9FA5-07DC6EC60D18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2993F389-39B1-45B1-9FA5-07DC6EC60D18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2993F389-39B1-45B1-9FA5-07DC6EC60D18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

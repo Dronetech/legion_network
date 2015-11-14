@@ -16,7 +16,11 @@ namespace legion_service.Models
 
         public sensor_data getLastSensorData(string userID)
         {
-            return db.sensor_data.Where(u => u.userGuid == userID).OrderByDescending(x => x.Id).FirstOrDefault();
+            
+            var _out = db.sensor_data.Where(u => u.userGuid == userID).OrderByDescending(x => x.Id).FirstOrDefault();
+          
+
+            return _out;
         }
 
         public List<sensor_data> getLastSensorData(string userID, int top)
